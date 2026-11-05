@@ -1,0 +1,68 @@
+# Author: Coach Mark Smith-Guerrero
+
+from pybricks.hubs import PrimeHub
+from pybricks.iodevices import XboxController
+from pybricks.parameters import Button, Direction, Port, Stop, Icon, Side, Color
+from pybricks.pupdevices import Motor, ColorSensor
+from pybricks.robotics import DriveBase
+from pybricks.tools import wait
+
+# Set up.
+hub = PrimeHub()
+sensor = ColorSensor(Port.E)
+left_drive = Motor(Port.A, Direction.COUNTERCLOCKWISE)
+right_drive = Motor(Port.B, Direction.CLOCKWISE)
+
+drive_base = DriveBase(left_drive, right_drive, 43, 114)
+drive_base.use_gyro(True)
+
+left_attachment = Motor(Port.C, Direction.CLOCKWISE)
+right_attachment = Motor(Port.D, Direction.CLOCKWISE)
+heading_error = 0
+
+def main():
+    while True:
+        # reset standard drive settings in case mission runs changed them
+        drive_base.settings(straight_speed=150, straight_acceleration=563, turn_rate=125, turn_acceleration=565)
+        pressed = hub.buttons.pressed()
+        color = sensor.color()
+        reflection = sensor.reflection()
+
+        print(color, reflection)
+
+        hub.light.on(color)
+        if Button.LEFT in pressed:
+            if color == Color.RED:
+                turn_right()
+            if color == Color.BLUE:
+                turn_left()
+            elif color == Color.GREEN:
+                go_straight()
+        elif Button.RIGHT in pressed:
+            if color == Color.RED:
+                right_run1()
+            if color == Color.WHITE:
+                right_run2()
+            elif color == Color.BLUE:
+                right_run3()
+    else:
+        hub.light.off()
+    wait(50)
+
+def turn_right():
+    drive_base.settings(straight_speed=300)
+    drive_base.turn(90) # 90 degrees right
+
+def turn_left():
+    drive_base.settings(straight_speed=300)
+    drive_base.turn(-90) # 90 degrees left
+
+def go_forwards():
+    drive_base.settings(straight_speed=300)
+    drive_base.straight(50) # 50 mm forwards
+
+def go_backwards():
+    drive_base.settings(straight_speed=300)
+    drive_base.straight(-50) # 50 mm backwards
+
+main()
