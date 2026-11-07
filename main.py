@@ -1,12 +1,15 @@
 # =============================================================================
 #  FIRST LEGO League — Mission Run Selector
 #  Author: Coach Mark Smith-Guerrero
+# =============================================================================
+#  FIRST LEGO League — Mission Run Selector
+#  Author: Coach Mark Smith-Guerrero, Kendall Painley, Ken Aucremanne
 #
 #  HOW TO START A RUN
 #    1. Start this program (center button on the hub).
 #    2. Hold a colored LEGO piece in front of the color sensor (Port E).
 #       The hub light changes to the color it sees, and the display shows
-#       the run number (1, 2, or 3).
+#       the run number (1, 2, 3 or 4).
 #    3. Press LEFT or RIGHT to start that run.
 #    4. When the run ends, the robot beeps and waits for the next selection.
 #
@@ -169,8 +172,8 @@ def left_run2():
     # Success rate:   __/10 (tested ____-__-__)
 
     # Example: run an attachment WHILE driving using wait=False
-    # right_attachment.run_angle(300, 180, wait=False)
-    # drive_base.straight(250)
+    right_attachment.run_angle(300, 180, wait=False)
+    drive_base.straight(250)
     hub.speaker.beep()
 
 
@@ -182,12 +185,26 @@ def left_run3():
     # Success rate:   __/10 (tested ____-__-__)
 
     # Example: slow for precision, fast for the trip home
-    # set_speed(straight=100)
-    # drive_base.straight(200)
-    # set_speed(straight=400)
-    # drive_base.straight(-200)
+    set_speed(straight=100)
+    drive_base.straight(200)
+    set_speed(straight=400)
+    drive_base.straight(-200)
     hub.speaker.beep()
 
+
+def left_run4():
+    # Mission:        ____________________
+    # Start position: ____________________
+    # Attachment:     ____________________
+    # Points:         ___
+    # Success rate:   __/10 (tested ____-__-__)
+
+    # Example: slow for precision, fast for the trip home
+    set_speed(straight=100)
+    drive_base.straight(200)
+    set_speed(straight=400)
+    drive_base.straight(-200)
+    hub.speaker.beep()
 
 # =============================================================================
 #  SECTION 5: RIGHT RUNS  (press the RIGHT button)
@@ -199,6 +216,11 @@ def right_run1():
     # Attachment:     ____________________
     # Points:         ___
     # Success rate:   __/10 (tested ____-__-__)
+    zero_attachment(left_attachment)            # 1. zero the arm
+    drive_base.straight(300)                    # 2. drive out 300 mm
+    drive_base.turn(90)                         # 3. turn right 90 degrees
+    left_attachment.run_target(300, 90)         # 4. move arm to 90 degrees
+    drive_base.straight(-300)                   # 5. back up toward home
     hub.speaker.beep()
 
 
@@ -208,6 +230,11 @@ def right_run2():
     # Attachment:     ____________________
     # Points:         ___
     # Success rate:   __/10 (tested ____-__-__)
+    zero_attachment(left_attachment)            # 1. zero the arm
+    drive_base.straight(300)                    # 2. drive out 300 mm
+    drive_base.turn(90)                         # 3. turn right 90 degrees
+    left_attachment.run_target(300, 90)         # 4. move arm to 90 degrees
+    drive_base.straight(-300)                   # 5. back up toward home
     hub.speaker.beep()
 
 
@@ -217,8 +244,26 @@ def right_run3():
     # Attachment:     ____________________
     # Points:         ___
     # Success rate:   __/10 (tested ____-__-__)
+    zero_attachment(left_attachment)            # 1. zero the arm
+    drive_base.straight(300)                    # 2. drive out 300 mm
+    drive_base.turn(90)                         # 3. turn right 90 degrees
+    left_attachment.run_target(300, 90)         # 4. move arm to 90 degrees
+    drive_base.straight(-300)                   # 5. back up toward home
     hub.speaker.beep()
 
+
+def right_run4():
+    # Mission:        ____________________
+    # Start position: ____________________
+    # Attachment:     ____________________
+    # Points:         ___
+    # Success rate:   __/10 (tested ____-__-__)
+    zero_attachment(left_attachment)            # 1. zero the arm
+    drive_base.straight(300)                    # 2. drive out 300 mm
+    drive_base.turn(90)                         # 3. turn right 90 degrees
+    left_attachment.run_target(300, 90)         # 4. move arm to 90 degrees
+    drive_base.straight(-300)                   # 5. back up toward home
+    hub.speaker.beep()
 
 # =============================================================================
 #  SECTION 6: RUN TABLE  (which color + button starts which run)
@@ -236,6 +281,7 @@ RUN_TABLE = [
     (Color.RED,    1,      left_run1,    right_run1),
     (Color.WHITE,  2,      left_run2,    right_run2),
     (Color.BLUE,   3,      left_run3,    right_run3),
+    (Color,GREEN,  4,      left_run4,    right_run4),
 ]
 
 
@@ -298,3 +344,4 @@ def main():
 
 
 main()
+
