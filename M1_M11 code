@@ -1,0 +1,167 @@
+
+# BIOGLOW robot: based on the team's supplied working program.
+# Original framework authors: Coach Mark Smith-Guerrero,
+# Kendall Painley, Ken Aucremanne.
+# Starts immediately when Run is pressed. Position at the M01 launch pose.
+from pybricks.hubs import PrimeHub
+from pybricks.parameters import Direction, Port, Stop
+from pybricks.pupdevices import Motor
+from pybricks.robotics import DriveBase
+from pybricks.tools import StopWatch, wait
+
+hub = PrimeHub()
+left_drive = Motor(Port.A, Direction.COUNTERCLOCKWISE)
+right_drive = Motor(Port.B, Direction.CLOCKWISE)
+drive_base = DriveBase(left_drive, right_drive, 43, 114)
+drive_base.use_gyro(True)
+
+
+def mission1():
+    # Preserve the supplied program's actual DriveBase defaults.
+    # It defined a settings helper but never called it.
+    # No attachment motor movement was present in the supplied program.
+    hub.speaker.beep()
+    drive_base.straight(700)
+
+# Trial route after mission 1. Positive turns are RIGHT; distances are mm.
+ROUTE = [
+    ("straight", -150),
+    ("turn", -90),
+    ("straight", 590),  # Latest supplied program uses 590, not 600.
+    ("turn", 90),
+    ("straight", 450),
+    ("turn", -45),
+]
+ENABLE_BUMP = True  # False = stop after the final 45-degree turn.
+BUMP_SPEED = 500    # mm/s; increase in small steps after checking alignment.
+BUMP_MAX_MS = 650   # Includes acceleration and approach.
+BUMP_MAX_MM = 500   # Estimated wheel travel; wheels can slip.
+RETREAT_MM = 60
+
+
+def move(kind, amount):
+    speed = 150 if kind == "straight" else 60
+    timeout = 2000 + int(3000 * abs(amount) / speed)
+    timer = StopWatch()
+    try:
+        if kind == "straight":
+            drive_base.straight(amount, then=Stop.BRAKE, wait=False)
+        else:
+            drive_base.turn(amount, then=Stop.BRAKE, wait=False)
+        while not drive_base.done():
+            if drive_base.stalled():
+                raise RuntimeError("Route obstructed: stopped before bump")
+            if timer.time() >= timeout:
+                raise RuntimeError("Route timed out: stopped before bump")
+            wait(10)
+    finally:
+        drive_base.brake()
+
+
+def bump():
+    start = drive_base.distance()
+    timer = StopWatch()
+    try:
+        drive_base.drive(BUMP_SPEED, 0)
+        while timer.time() < BUMP_MAX_MS:
+            if abs(drive_base.distance() - start) >= BUMP_MAX_MM:
+                break
+            if drive_base.stalled():
+                break
+            wait(10)
+    finally:
+        drive_base.brake()
+    print("Bump ended; visually check that the cover opened.")
+    wait(150)
+    move("straight", -RETREAT_MM)
+
+
+def mission11():
+    saved = drive_base.settings()
+    drive_base.brake()
+    try:
+        drive_base.settings(150, 400, 60, 250)
+        for kind, amount in ROUTE:
+            move(kind, amount)
+        if ENABLE_BUMP:
+            bump()
+        else:
+            print("Route complete; bump disabled.")
+    finally:
+        drive_base.brake()
+        drive_base.settings(*saved)
+
+
+# One continuous run: no motor reinitialization or gyro reset between missions.
+# Attachment position is unchanged; check clearance before trying the route.
+try:
+    mission1()
+    mission11()
+finally:
+    drive_base.brake()
+
+BUMP_MAX_MS = 500   # Includes acceleration and approach.
+BUMP_MAX_MM = 1000   # Estimated wheel travel; wheels can slip.
+RETREAT_MM = 60
+
+
+def move(kind, amount):
+    speed = 150 if kind == "straight" else 60
+    timeout = 2000 + int(3000 * abs(amount) / speed)
+    timer = StopWatch()
+    try:
+        if kind == "straight":
+            drive_base.straight(amount, then=Stop.BRAKE, wait=False)
+        else:
+            drive_base.turn(amount, then=Stop.BRAKE, wait=False)
+        while not drive_base.done():
+            if drive_base.stalled():
+                raise RuntimeError("Route obstructed: stopped before bump")
+            if timer.time() >= timeout:
+                raise RuntimeError("Route timed out: stopped before bump")
+            wait(10)
+    finally:
+        drive_base.brake()
+
+
+def bump():
+    start = drive_base.distance()
+    timer = StopWatch()
+    try:
+        drive_base.drive(BUMP_SPEED, 0)
+        while timer.time() < BUMP_MAX_MS:
+            if abs(drive_base.distance() - start) >= BUMP_MAX_MM:
+                break
+            if drive_base.stalled():
+                break
+            wait(10)
+    finally:
+        drive_base.brake()
+    print("Bump ended; visually check that the cover opened.")
+    wait(150)
+    move("straight", -RETREAT_MM)
+
+
+def mission11():
+    saved = drive_base.settings()
+    drive_base.brake()
+    try:
+        drive_base.settings(150, 400, 60, 250)
+        for kind, amount in ROUTE:
+            move(kind, amount)
+        if ENABLE_BUMP:
+            bump()
+        else:
+            print("Route complete; bump disabled.")
+    finally:
+        drive_base.brake()
+        drive_base.settings(*saved)
+
+
+# One continuous run: no motor reinitialization or gyro reset between missions.
+# Attachment position is unchanged; check clearance before trying the route.
+try:
+    mission1()
+    mission11()
+finally:
+    drive_base.brake()
