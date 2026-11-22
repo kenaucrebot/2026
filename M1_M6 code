@@ -29,7 +29,7 @@ ROUTE = [
     ("turn", -90),
     ("straight", 590),  # Latest supplied program uses 590, not 600.
     ("turn", 90),
-    ("straight", 450),
+    ("straight", 440),
     ("turn", -45),
 ]
 ENABLE_BUMP = True  # False = stop after the final 45-degree turn.
