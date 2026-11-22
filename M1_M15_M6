@@ -1,0 +1,47 @@
+from pybricks.hubs import PrimeHub
+from pybricks.iodevices import XboxController
+from pybricks.parameters import Button, Direction, Port, Stop, Icon, Side, Color
+from pybricks.pupdevices import Motor, ColorSensor
+from pybricks.robotics import DriveBase
+from pybricks.tools import wait
+
+# Set up.
+hub = PrimeHub()
+# sensor = ColorSensor(Port.E)
+left_drive = Motor(Port.A, Direction.COUNTERCLOCKWISE)
+right_drive = Motor(Port.B, Direction.CLOCKWISE)
+drive_base = DriveBase(left_drive, right_drive, 43, 114)
+drive_base.use_gyro(True)
+left_attachment = Motor(Port.C, Direction.CLOCKWISE)
+right_attachment = Motor(Port.D, Direction.CLOCKWISE)
+
+# define functions...
+def tester():
+    hub.speaker.beep()
+    drive_base.straight(50)
+    left_attachment.run_angle(speed=400, rotation_angle=360)
+    right_attachment.run_angle(speed=400, rotation_angle=360)
+    drive_base.straight(-50)
+    hub.speaker.beep()
+
+
+drive_base.straight(700)
+drive_base.straight(-180)
+drive_base.turn(-90)
+drive_base.straight(430)
+left_attachment.run_angle(speed=400, rotation_angle=320)
+drive_base.turn(90)
+drive_base.straight(140)
+drive_base.straight(-200)
+left_attachment.run_angle(speed=400, rotation_angle=-310)
+drive_base.turn(-45)
+drive_base.straight(220)
+drive_base.turn(45)
+drive_base.straight(425)
+drive_base.turn(-45)
+drive_base.straight(800)
+drive_base.straight(-100)
+drive_base.turn(70)
+drive_base.straight(300)
+drive_base.turn(30)
+drive_base.straight(350)
