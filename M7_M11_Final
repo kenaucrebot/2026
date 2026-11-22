@@ -26,9 +26,9 @@ def tester():
 
 
 # main code...
-left_attachment.run_angle(speed=400, rotation_angle=425)
+left_attachment.run_angle(speed=400, rotation_angle=360)
 drive_base.straight(575)
-left_attachment.run_angle(speed=400, rotation_angle=-175)
+left_attachment.run_angle(speed=400, rotation_angle=-150)
 drive_base.straight(-75)
 drive_base.straight(75)
 drive_base.straight(-275)
@@ -36,4 +36,4 @@ left_attachment.run_angle(speed=400, rotation_angle=425)
 drive_base.turn(-45)
 drive_base.straight(100)
 left_attachment.run_angle(speed=400, rotation_angle=-175)
-drive_base.straight(-310)
+drive_base.straight(-340)
